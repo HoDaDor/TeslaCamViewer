@@ -1,0 +1,24 @@
+{
+  "files": [
+    "qtTeslaCam.py",
+    "teslacam_app/__init__.py",
+    "teslacam_app/__main__.py",
+    "teslacam_app/cameras.py",
+    "teslacam_app/data.py",
+    "teslacam_app/export_dialog.py",
+    "teslacam_app/exporter.py",
+    "teslacam_app/main.py",
+    "teslacam_app/map_renderer.py",
+    "teslacam_app/recovery.py",
+    "teslacam_app/recovery_dialog.py",
+    "teslacam_app/settings_store.py",
+    "teslacam_app/telemetry.py",
+    "teslacam_app/telemetry_visuals.py",
+    "teslacam_app/ui.py",
+    "teslacam_app/video_surface.py",
+    "teslacam_app/viewer.py",
+    "teslacam_app/widgets.py",
+    "leaflet/leaflet.css",
+    "leaflet/leaflet.js"
+  ]
+}

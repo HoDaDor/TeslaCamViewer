@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "teslacam-viewer"
+version = "0.1.0"
+description = "PySide6 desktop viewer and recovery utility for Tesla dashcam footage"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "opencv-python>=4.9",
+    "psutil>=5.9",
+    "PySide6>=6.7",
+    "PyYAML>=6.0",
+]
+
+[project.scripts]
+teslacam-viewer = "teslacam_app.main:run"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["teslacam_app"]
+
+[tool.setuptools.package-data]
+"*" = ["*.css", "*.js"]
