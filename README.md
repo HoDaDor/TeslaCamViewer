@@ -1,25 +1,68 @@
 # TeslaCamViewer
 
-TeslaCamViewer is a PySide6 desktop app for reviewing Tesla dashcam and Sentry
-Mode clips. It focuses on the common workflow of opening a TeslaCam event
-folder, reviewing the available camera angles together, checking the event
-metadata, and exporting useful stills or short clips.
+TeslaCamViewer helps you review Tesla dashcam and Sentry Mode clips without
+juggling separate video files. Open an event folder and the app lines up the
+available camera angles, shows the incident point, displays event details, and
+helps export still frames or short clips when you need to share what happened.
 
-The app also includes a separate recovery workspace for advanced users who need
-to scan a raw TeslaCam USB device or disk image for recoverable MP4 fragments.
-The recovery workspace includes guided setup, scan filters, progress reporting,
-and extra-salvage tools for promising results.
+It also includes a separate recovery workspace for users who need to look for
+recoverable TeslaCam MP4 fragments on a USB drive or disk image.
 
-## Highlights
+## Why Use It?
 
-- Multi-angle playback for the camera feeds found in each event folder
-- Front, repeater, and rear view swapping from a responsive camera layout
-- Event bookmark support for jumping to the recorded incident moment
-- Embedded map and event details from `event.json` when metadata is available
-- Vehicle telemetry panel for supported clips with embedded speed and input data
-- Evidence-oriented export of still frames, clip excerpts, and manifests
-- Separate recovery tab with guided settings, YAML-backed preferences, and
-  targeted extra-salvage recovery for promising scan results
+- Watch the front, repeater, and rear camera views together
+- Jump straight to the recorded event moment
+- See location, time, event reason, and available vehicle data in one place
+- Export still frames or short clips with useful context attached
+- Use recovery tools when footage may have been deleted, truncated, or
+  overwritten
+
+## Download And Install
+
+The release downloads install like a normal desktop app. You do not need
+Python, Git, or command-line tools unless you want to run the project from
+source.
+
+Download the latest build from the
+[TeslaCamViewer Releases page](https://github.com/HoDaDor/TeslaCamViewer/releases/latest).
+
+Choose the file that matches your computer:
+
+- Windows: download the file ending in `windows-x64-setup.exe`
+- Mac with Apple Silicon: download the file ending in `macos-arm64.dmg`
+- Mac with Intel: download the file ending in `macos-x64.dmg`
+
+### Windows
+
+1. Download the `windows-x64-setup.exe` file.
+2. Open the downloaded file.
+3. Follow the installer prompts.
+4. Launch TeslaCamViewer from the Start menu.
+
+### Mac
+
+1. Download the correct `.dmg` file for your Mac.
+2. Open the downloaded DMG.
+3. Move TeslaCamViewer into Applications if prompted.
+4. Open TeslaCamViewer from Applications.
+
+The current Mac builds are not notarized yet, so macOS may ask you to confirm
+that you want to open the app the first time.
+
+If you are not sure which Mac you have, open `Apple menu > About This Mac`. If
+it says Apple M1, M2, M3, M4, or newer, choose the Apple Silicon download. If it
+says Intel, choose the Intel download.
+
+## First Steps
+
+1. Copy the TeslaCam folder from the USB drive to your computer when possible.
+2. Open TeslaCamViewer.
+3. Click `Open TeslaCam Folder`.
+4. Select an event folder from `RecentClips`, `SavedClips`, or `SentryClips`.
+5. Use `Go to Event` to jump to the incident point if event metadata is present.
+
+Keeping a copy of the original Tesla files is important. Exports are useful for
+sharing and review, but the original files are still the source footage.
 
 ## Screenshots
 
@@ -31,21 +74,21 @@ and extra-salvage tools for promising results.
 
 ![Recovery workspace](docs/screenshots/recovery-workspace.png)
 
-## Feature Overview
+## What It Can Do
 
 ### Multi-Angle Review
 
-- Detects available Tesla camera angles dynamically
-- Automatically lays out the camera views found in the selected folder
-- Lets users promote an auxiliary angle into the main playback view
-- Keeps the event timeline visible in both the main and synced angle controls
+- Finds the available Tesla camera views in the selected folder
+- Lines up the views so the same moment can be reviewed from multiple angles
+- Lets a side or rear camera become the main view with a click
+- Keeps playback controls and event markers visible while reviewing footage
 
 ### Event Context
 
-- Uses `event.json` metadata when available
-- Shows location details such as city, event type, time, and coordinates
-- Supports an event bookmark marker in the playback sliders
-- Shows frame-synced speed, steering, pedal, and acceleration data when present
+- Reads `event.json` metadata when available
+- Shows city, event type, event time, coordinates, and camera details
+- Marks the event point on the playback sliders
+- Shows speed, steering, pedal, and acceleration data when supported by the clip
 
 ### Evidence Export
 
@@ -55,8 +98,8 @@ and extra-salvage tools for promising results.
 - Writes a manifest with source hashes and event metadata so exported files stay
   tied back to the original clips
 
-The export tools are meant to help organize and explain footage. They do not
-replace preserving the original Tesla files.
+The export tools help organize and explain footage. They do not replace
+preserving the original Tesla files.
 
 ### Recovery Mode
 
@@ -73,7 +116,34 @@ working directly from the USB drive. Recovery speed also depends heavily on the
 source USB port, the source drive, and the output drive; a USB 2.0 path can take
 much longer than USB 3.x or a fast internal SSD.
 
-## Tech Stack
+## Requirements
+
+- Windows 10/11 or macOS
+- TeslaCam footage copied from a Tesla USB drive
+- `ffprobe` available on `PATH` for recovery workflows
+
+Normal viewing does not require recovery mode. Recovery work is more advanced
+and may require Administrator access on Windows when scanning a live USB device.
+
+## Run From Source
+
+Most users should use the release downloads above. This section is only for
+development or manual source installs.
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -e .
+python qtTeslaCam.py
+```
+
+After installation, the console command is also available:
+
+```powershell
+teslacam-viewer
+```
+
+## Technology
 
 - Python 3.11+
 - PySide6
@@ -81,26 +151,6 @@ much longer than USB 3.x or a fast internal SSD.
 - PyYAML
 - psutil
 - FFmpeg / `ffprobe`
-
-## Installation
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -e .
-```
-
-## Running
-
-```powershell
-python qtTeslaCam.py
-```
-
-Or after installation:
-
-```powershell
-teslacam-viewer
-```
 
 ## Project Layout
 
@@ -122,7 +172,7 @@ teslacam-viewer
 
 - Windows setup build: `.\build.ps1 -Force -Installer`
 - macOS DMG build: `./build-macos.sh --force --dmg`
-  - GitHub Releases build separate Apple Silicon and Intel packages.
+- GitHub Releases build separate Apple Silicon and Intel packages.
 - Desktop deployment notes: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
 
 ## Recovery Notes
