@@ -1,21 +1,29 @@
 # TeslaCamViewer
 
-TeslaCamViewer helps you review Tesla dashcam and Sentry Mode clips without
-juggling separate video files. Open an event folder and the app lines up the
-available camera angles, shows the incident point, displays event details, and
-helps export still frames or short clips when you need to share what happened.
+TeslaCamViewer plays Tesla dashcam and Sentry Mode clips saved from your USB in
+a desktop layout inspired by Tesla's in-car viewer, without making you juggle
+separate video files by hand.
 
-It also includes a separate recovery workspace for users who need to look for
-recoverable TeslaCam MP4 fragments on a USB drive or disk image.
+Open a TeslaCam event folder and review the available camera angles together,
+jump to the moment that triggered the event, check the map and event details,
+and export useful stills or clips when you need to share footage. For harder
+cases, the separate recovery workspace can scan a TeslaCam USB or disk image for
+potentially lost footage.
 
-## Why Use It?
+## Features
 
-- Watch the front, repeater, and rear camera views together
-- Jump straight to the recorded event moment
-- See location, time, event reason, and available vehicle data in one place
-- Export still frames or short clips with useful context attached
-- Use recovery tools when footage may have been deleted, truncated, or
-  overwritten
+- In-car-style multi-camera playback for TeslaCam folders on your computer
+- One-click jump to the recorded event moment when event data is available
+- Front, rear, and repeater views shown together so the full scene is easier to
+  understand
+- Click any camera angle to bring it into the main view for a closer look
+- Map, location, event reason, and timestamp details pulled from `event.json`
+- Vehicle telemetry display for supported clips, including speed, steering,
+  pedal input, and acceleration visuals
+- Evidence exports for still frames and short clips, with source details and
+  event context attached
+- Recovery mode to scan a dashcam USB or disk image for potentially lost,
+  overwritten, truncated, or recoverable footage
 
 ## Download And Install
 
