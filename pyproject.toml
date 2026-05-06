@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "teslacam-viewer"
-version = "0.1.0"
+version = "0.1.1"
 description = "PySide6 desktop viewer and recovery utility for Tesla dashcam footage"
 readme = "README.md"
 requires-python = ">=3.11"
