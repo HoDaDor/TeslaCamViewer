@@ -8,11 +8,15 @@ ordering stay in sync.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 
 COMPOSITE_CLIP_KEY = "event_clip"
 COMPOSITE_CLIP_LABEL = "Event Clip"
+TIMESTAMPED_CAMERA_RE = re.compile(
+    r"\d{4}_\d{2}_\d{2}_\d{2}_\d{2}_\d{2}_(?P<camera>[a-z0-9_]+)$"
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -43,13 +47,21 @@ class CameraAngle:
 CAMERA_ANGLES: tuple[CameraAngle, ...] = (
     CameraAngle("front_narrow", "Front Narrow", ("front_narrow", "narrow"), 5, 0),
     CameraAngle("front_fisheye", "Front Fisheye", ("front_fisheye", "fisheye"), 10, 1),
-    CameraAngle("front", "Front", ("front",), 15, 2),
-    CameraAngle("left_pillar", "Left Pillar", ("left_pillar", "leftpillar"), 20, 3),
-    CameraAngle("left_repeater", "Left Repeater", ("left_repeater",), 25, 4),
-    CameraAngle("rear", "Rear", ("rear", "back"), 30, 5),
-    CameraAngle("right_repeater", "Right Repeater", ("right_repeater",), 35, 6),
-    CameraAngle("right_pillar", "Right Pillar", ("right_pillar", "rightpillar"), 40, 7),
-    CameraAngle("cabin", "Cabin", ("cabin",), 45, 8),
+    CameraAngle(
+        "front_bumper",
+        "Front Bumper",
+        ("front_bumper", "bumper_front", "bumper"),
+        12,
+        2,
+    ),
+    CameraAngle("front_wide", "Front Wide", ("front_wide", "wide"), 14, 3),
+    CameraAngle("front", "Front", ("front",), 15, 4),
+    CameraAngle("left_pillar", "Left Pillar", ("left_pillar", "leftpillar"), 20, 5),
+    CameraAngle("left_repeater", "Left Repeater", ("left_repeater", "left"), 25, 6),
+    CameraAngle("rear", "Rear", ("rear", "back"), 30, 7),
+    CameraAngle("right_pillar", "Right Pillar", ("right_pillar", "rightpillar"), 35, 8),
+    CameraAngle("right_repeater", "Right Repeater", ("right_repeater", "right"), 40, 9),
+    CameraAngle("cabin", "Cabin", ("cabin", "interior", "inside"), 45, 10),
 )
 
 CAMERA_BY_KEY = {camera.key: camera for camera in CAMERA_ANGLES}
@@ -74,10 +86,34 @@ def detect_camera_key(filename: str) -> str | None:
     if "event" in normalized:
         return COMPOSITE_CLIP_KEY
 
+    timestamped_camera = detect_timestamped_camera_suffix(normalized)
+    if timestamped_camera:
+        for camera in CAMERA_ANGLES:
+            if timestamped_camera == camera.key or timestamped_camera in camera.aliases:
+                return camera.key
+        return timestamped_camera
+
     for camera in CAMERA_ANGLES:
         if any(alias in normalized for alias in camera.aliases):
             return camera.key
+
     return None
+
+
+def detect_timestamped_camera_suffix(normalized_filename: str) -> str | None:
+    """Return an unknown camera suffix from a timestamped Tesla filename.
+
+    This keeps the viewer forward-compatible with new Tesla camera names. A
+    future file such as ``2026-01-01_12-00-00-new_angle.mp4`` can still load
+    even before the app has a dedicated label for that camera.
+    """
+
+    match = TIMESTAMPED_CAMERA_RE.search(normalized_filename)
+    if match is None:
+        return None
+
+    camera_key = match.group("camera").strip("_")
+    return camera_key or None
 
 
 def camera_label(camera_key: str | None) -> str:
